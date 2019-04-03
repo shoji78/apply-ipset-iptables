@@ -87,23 +87,21 @@ setup_main_script() {
   local SCRIPT_NAME="apply-ipset-iptables.py"
   local DIR="/opt/apply-ipset-iptables"
 
-  pip3 install python-iptables
-
   mkdir -p $DIR
   if [[ -e "$INSTALLER_DIR/$SCRIPT_NAME" ]]; then
     cp "$INSTALLER_DIR/$SCRIPT_NAME" "$DIR/$SCRIPT_NAME"
   else
-    curl -o $DIR/$SCRIPT_NAME https://github.com/shoji78/apply-ipset-iptables/raw/master/apply-ipset-iptables.py
+    curl -o $DIR/$SCRIPT_NAME "https://raw.githubusercontent.com/shoji78/apply-ipset-iptables/master/apply-ipset-iptables.py"
   fi
   chmod 755 $DIR/$SCRIPT_NAME
+  ln -s $DIR/$SCRIPT_NAME /usr/local/bin/
 }
 
 
 export DEBIAN_FRONTEND=noninteractive
 apt install -y \
   iptables-persistent \
-  ipset \
-  python3-pip
+  ipset 
 
 setup_ipset_persistent
 
