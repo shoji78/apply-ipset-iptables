@@ -81,6 +81,24 @@ EOT
   touch /etc/iptables/rules.ipset
 }
 
+
+setup_main_script() {
+  local INSTALLER_DIR=$(cd $(dirname $0); pwd)
+  local SCRIPT_NAME="apply-ipset-iptables.py"
+  local DIR="/opt/apply-ipset-iptables"
+
+  pip3 install python-iptables
+
+  mkdir -p $DIR
+  if [[ -e "$INSTALLER_DIR/$SCRIPT_NAME" ]]; then
+    cp "$INSTALLER_DIR/$SCRIPT_NAME" "$DIR/$SCRIPT_NAME"
+  else
+    curl -o $DIR/$SCRIPT_NAME https://github.com/shoji78/apply-ipset-iptables/raw/master/apply-ipset-iptables.py
+  fi
+  chmod 755 $DIR/$SCRIPT_NAME
+}
+
+
 export DEBIAN_FRONTEND=noninteractive
 apt install -y \
   iptables-persistent \
@@ -89,5 +107,5 @@ apt install -y \
 
 setup_ipset_persistent
 
-pip3 install python-iptables
+setup_main_script
 
